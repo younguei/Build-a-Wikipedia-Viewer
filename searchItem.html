@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Weather API</title>
+	<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+	<script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	<link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.css" rel="stylesheet">
+	<style type="text/css" media="screen">
+		body{
+			background-color:#092B40;
+		}
+		.box{
+			padding: 50px;
+			padding-bottom: 10px;
+			padding-top: 30px;
+			width: 400px;
+			margin-top: 150px;
+			text-align: center;
+			display: inline-block;
+		}
+		.title,.footer{
+			font-size:20px;
+			margin: 10px 0;
+			color: #fff;
+		}
+		#searchItem{
+			border: 2px solid orange;
+			padding: 5px 10px;
+			height: 34px;
+			border-radius: 15px;
+			outline: none;
+		}
+		#close{
+			position: relative;
+			left:-20px;
+			cursor: pointer;
+		}
+		.title a:link, .title a:hover,.title a:active,.title a:visited{
+			color:#fff;
+			text-decoration: none;
+		}
+		.content{
+			color:#fff;
+
+		}
+		.content .innerBox{
+			width:80%;
+			padding-top: 10px;
+			padding-left: 15px;
+			padding-bottom: 10px;
+			margin: 20px auto;
+			border: 5px solid #fff;
+			border-radius: 10px;
+			text-align: center;
+		}
+		.content .innerBox h2{
+			margin-bottom: 5px;
+			margin-top: 5px;
+		}
+		.content .innerBox .count{
+			text-align: left;
+		}
+		.content .innerBox:hover{
+			border-left: 10px solid orange;
+			padding-left: 10px;
+
+		}
+		#searchBtn{
+			margin-left: 10px;
+			vertical-align: baseline;
+		}
+
+	</style>
+	<script type="text/javascript">
+		$(function(){
+			$(".box").css({"marginLeft":$(".container").width()/2-$(".box").width()/2-50});
+			
+			$("#close").bind("click",function(){
+				$("#searchItem").val("").focus();
+				
+			});
+
+			$("#searchBtn").click(function(){
+				var value = $("#searchItem").val();
+				$(".box").animate({"marginTop":"10px"}, 500);
+				var url = "https://en.wikipedia.org/w/api.php?action=opensearch&search="+value+"&callback=?";
+				$.getJSON(url,function(data){
+					console.log(data);
+					console.log(data[1][1]);
+					$(".content").children().remove();
+					var arrLength = data[1].length;
+					for(var i=0;i<arrLength;i++){
+						$(".content").append("<div class='innerBox'><h2>"+"<a href="+data[3][i]+">"+data[1][i]+"</a></h2>"+"<span>"+data[2][i]+"</span><br><span class='count'>"+(i+1)+"</span></div>");
+					}
+				})
+			})
+
+			
+		});
+
+	</script>
+</head>
+<body>
+	 <div class="container">
+	 	<div class="box">
+	 		<p class="title"><a href="http://en.wikipedia.org/wiki/Special:Random">Click here for a random article</a></p>
+	 		<input type="text" name="" id="searchItem"><span class="glyphicon glyphicon-remove" id="close"><button type="buton" class="btn btn-default" id="searchBtn">Search</button></span>
+	 		<p class="footer">Click icon to search</p>
+	 	</div>
+	 	<div class="content">
+	 		
+	 	</div>
+	 </div>
+</body>
+</html>
